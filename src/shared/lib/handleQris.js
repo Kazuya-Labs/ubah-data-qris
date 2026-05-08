@@ -55,7 +55,6 @@ export const readQrisImage = (file) => {
 };
 
 export const updateQris = (rawQris, newName, amount) => {
-  console.log("🚀 ~ updateQris ~ amount:", amount);
   // 1. Hapus CRC lama (4 karakter terakhir)
   let qrisData = rawQris.substring(0, rawQris.length - 4);
 
@@ -71,7 +70,6 @@ export const updateQris = (rawQris, newName, amount) => {
     const fullTagOld = data.substring(tagIndex, tagIndex + rentang + oldLength);
 
     const newLengthStr = newValue.length.toString().padStart(2, "0");
-    console.log("🚀 ~ replaceTag ~ newLengthStr:", newLengthStr);
     const fullTagNew = `${tag}${newLengthStr}${newValue}`;
 
     return data.replace(fullTagOld, fullTagNew);
@@ -89,11 +87,9 @@ export const updateQris = (rawQris, newName, amount) => {
     const indx = qrisData.indexOf("11");
     const am = amount.toString()
    const leng = am.length < 10 ? "0" + am.length : am.length.toString();
-    console.log("🚀 ~ updateQris ~ am:", am);
     qrisData =
       qrisData.slice(0, indx - 1) + "21254" + leng + am + qrisData.slice(indx + 2);
 
-    console.log("🚀 ~ updateQris ~ qrisData:", qrisData);
   }
 
   // 6. Hitung ulang CRC16
