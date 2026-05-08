@@ -55,19 +55,23 @@ export const readQrisImage = (file) => {
 };
 
 export const updateQris = (rawQris, newName, amount) => {
+  console.log("🚀 ~ updateQris ~ amount:", amount);
   // 1. Hapus CRC lama (4 karakter terakhir)
   let qrisData = rawQris.substring(0, rawQris.length - 4);
 
   // 2. Fungsi Helper untuk Replace/Inject Tag
-  const replaceTag = (data, tag, newValue) => {
+  const replaceTag = (data, tag, newValue, rentang = 4) => {
     const tagIndex = data.indexOf(tag);
     if (tagIndex === -1) return data; // Jika tag tidak ada
 
     // Ambil 2 digit setelah tag untuk tahu panjang datanya
-    const oldLength = parseInt(data.substring(tagIndex + 2, tagIndex + 4));
-    const fullTagOld = data.substring(tagIndex, tagIndex + 4 + oldLength);
+    const oldLength = parseInt(
+      data.substring(tagIndex + 2, tagIndex + rentang),
+    );
+    const fullTagOld = data.substring(tagIndex, tagIndex + rentang + oldLength);
 
     const newLengthStr = newValue.length.toString().padStart(2, "0");
+    console.log("🚀 ~ replaceTag ~ newLengthStr:", newLengthStr);
     const fullTagNew = `${tag}${newLengthStr}${newValue}`;
 
     return data.replace(fullTagOld, fullTagNew);
@@ -82,18 +86,14 @@ export const updateQris = (rawQris, newName, amount) => {
   // Jika amount ada, kita masukkan. Jika tidak ada tag 54, kita harus menambahkannya
   // Biasanya tag 54 berada sebelum tag 58 (Currency)
   if (amount) {
-    const formattedAmount = amount.toString();
-    if (qrisData.includes("54")) {
-      qrisData = replaceTag(qrisData, "54", formattedAmount);
-    } else {
-      // Injeksi manual sebelum Tag 58 (IDR Currency biasanya 5802360)
-      const tag58Pos = qrisData.indexOf("58");
-      const tag54 = `54${formattedAmount.length.toString().padStart(2, "0")}${formattedAmount}`;
-      qrisData = qrisData.slice(0, tag58Pos) + tag54 + qrisData.slice(tag58Pos);
-    }
+    const indx = qrisData.indexOf("11");
+    const am = amount.toString()
+   const leng = am.length < 10 ? "0" + am.length : am.length.toString();
+    console.log("🚀 ~ updateQris ~ am:", am);
+    qrisData =
+      qrisData.slice(0, indx - 1) + "21254" + leng + am + qrisData.slice(indx + 2);
 
-    // 5. Ubah Point of Initiation Method ke Dinamis (Tag 01) -> "12"
-    qrisData = replaceTag(qrisData, "01", "12");
+    console.log("🚀 ~ updateQris ~ qrisData:", qrisData);
   }
 
   // 6. Hitung ulang CRC16

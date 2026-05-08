@@ -33,20 +33,17 @@ const ErrorMessage = ({ message }) => (
 
 function generateQris() {
   const [originalQris, setOriginalQris] = useState("");
-  console.log("🚀 ~ generateQris ~ originalQris:", originalQris);
   const [newname, setNewname] = useState("");
   const [amount, setAmount] = useState("");
   const [isPending, setisPending] = useState(false);
   const [finalQris, setFinalQris] = useState("");
   const [value, showValue] = useTimeout(2000);
-  console.log("🚀 ~ generateQris ~ finalQris:", finalQris);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setisPending(true);
       // Proses QRIS di sini, misalnya dengan memanggil fungsi handleQris dari lib
       const rawQris = await readQrisImage(originalQris);
-      console.log("🚀 ~ handleSubmit ~ rawQris:", rawQris);
       const newQris = await updateQris(rawQris, newname, amount);
       const newQrisImage = await generateQrisImage(newQris);
       setFinalQris(newQrisImage);
@@ -72,6 +69,7 @@ function generateQris() {
           placeholder="nominal ( opsional )"
           className="mb-4  border-slate-950 rounded-sm"
           onChange={(e) => setAmount(e.target.value)}
+          type='number'
         />
         <Input
           placeholder="Foto Qris"
@@ -91,7 +89,7 @@ function generateQris() {
       {value && <ErrorMessage message={value} />}
       {isPending && <Loading />}
       {finalQris !== "" && (
-        <div className="shadow border-slate-950 rounded-md p4 mx-auto mt-10 ">
+        <div className="shadow border-slate-950 rounded-md p4 mx-auto mt-10 w-full max-w-sm">
           <h3 className="text-slate-900 text-center m-2">Results</h3>
           <img src={finalQris} alt="Generated QRIS" className="aspect-square" />
           <DownloadButton imageBase64={finalQris} />
