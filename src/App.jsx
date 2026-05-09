@@ -5,7 +5,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/generate-qris" element={<GenerateQris />} />
+        <Route path="/" element={<GenerateQris />} />
       </Routes>
     </BrowserRouter>
   );
