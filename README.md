@@ -26,17 +26,17 @@ Aplikasi berbasis web modern untuk memodifikasi **Nama Merchant** dan mengubah *
 
 2. **Instal dependensi:**
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Jalankan aplikasi dalam mode pengembangan:**
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 4. **Build untuk produksi:**
    ```bash
-   npm run build
+   pnpm run build
    ```
 
 ## 📋 Cara Penggunaan
