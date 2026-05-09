@@ -20,8 +20,8 @@ Aplikasi berbasis web modern untuk memodifikasi **Nama Merchant** dan mengubah *
 
 1. **Clone repository:**
    ```bash
-   git clone https://github.com
-   cd qris-generator
+   git clone https://github.com/Kazuya-Labs/ubah-data-qris.git
+   cd ubah-data-qris
    ```
 
 2. **Instal dependensi:**
