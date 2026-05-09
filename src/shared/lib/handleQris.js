@@ -80,12 +80,12 @@ export const updateQris = (rawQris, newName, amount) => {
     return data.replace(fullTagOld, fullTagNew);
   };
 
-  // 3. Update Nama Merchant (Tag 59)
+  // Update Nama Merchant (Tag 59)
   if (newName) {
     qrisData = replaceTag(qrisData, "59", newName);
   }
 
-  // 4. Update Nominal (Tag 54) - Format: 54 + 2 digit length + value
+  // Update Nominal (Tag 54) - Format: 54 + 2 digit length + value
   if (amount) {
     if (Number(amount) <= 0) {
       throw new Error("Nominal harus lebih besar dari 0.");
@@ -101,7 +101,7 @@ export const updateQris = (rawQris, newName, amount) => {
       qrisData.slice(indx + 2);
   }
 
-  // 6. Hitung ulang CRC16
+  // Hitung ulang CRC16
   const crc = hitungCRC16(qrisData);
   return qrisData + crc;
 };

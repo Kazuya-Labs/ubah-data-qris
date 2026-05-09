@@ -9,7 +9,7 @@ import {
 import { useTimeout } from "./hook/useTimeout";
 import { Footer } from "../../shared/ui/Footer";
 
-// Komponen Card untuk Fitur/Instruksi agar web tidak kosong
+// Komponen Card untuk Fitur/Instruksi
 const FeatureCard = ({ title, desc, icon }) => (
   <div className="p-4 bg-white rounded-lg border border-slate-200 shadow-sm">
     <div className="text-2xl mb-2">{icon}</div>
@@ -85,7 +85,7 @@ function GenerateQris() {
       <div className="max-w-6xl mx-auto px-4 -mt-10 pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Kolom Kiri: Instruksi */}
+        
           <div className="space-y-4">
             <FeatureCard 
               icon="⚡" 
@@ -104,7 +104,7 @@ function GenerateQris() {
             />
           </div>
 
-          {/* Kolom Tengah: Form Utama */}
+        
           <div className="lg:col-span-2">
             <div className="p-8 shadow-2xl rounded-3xl bg-white border border-slate-100">
               <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
@@ -154,7 +154,7 @@ function GenerateQris() {
               </div>
             </div>
 
-            {/* Kolom Hasil (Jika Ada) */}
+          
             {finalQris && (
               <div className="mt-8 p-8 bg-white rounded-3xl shadow-xl border-2 border-slate-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="flex flex-col md:flex-row items-center gap-8">
