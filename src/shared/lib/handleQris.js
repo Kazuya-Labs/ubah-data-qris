@@ -15,14 +15,12 @@ export const readQrisImage = (file) => {
       const img = new Image();
 
       img.onload = () => {
-        // 1. Siapkan Canvas untuk ekstraksi data pixel
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
         canvas.width = img.width;
         canvas.height = img.height;
         context.drawImage(img, 0, 0);
 
-        // 2. Ambil data gambar (ImageData)
         const imageData = context.getImageData(
           0,
           0,
@@ -30,11 +28,9 @@ export const readQrisImage = (file) => {
           canvas.height,
         );
 
-        // 3. Gunakan library jsQR untuk mencari teks di dalam gambar
         const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
 
         if (qrCode && qrCode.data) {
-          // Berhasil menemukan string QRIS
           resolve(qrCode.data);
         } else {
           reject(
@@ -54,16 +50,25 @@ export const readQrisImage = (file) => {
   });
 };
 
+/**
+ * @param {string} rawQris - String QRIS asli yang diekstrak dari gambar.
+ * @param {string} newName - Nama merchant baru yang ingin diupdate (opsional).
+ * @param {string|number} amount - Nominal baru yang ingin diupdate (opsional).
+ * @returns {string} - String QRIS yang sudah diperbarui dengan nama dan/atau nominal baru.
+ *
+ * Fungsi ini akan mencari tag 59 untuk nama merchant dan tag 54 untuk nominal, lalu menggantinya dengan nilai baru.
+ * Setelah itu, fungsi akan menghitung ulang CRC16 untuk memastikan QRIS tetap valid. I
+ */
+
 export const updateQris = (rawQris, newName, amount) => {
-  // 1. Hapus CRC lama (4 karakter terakhir)
   let qrisData = rawQris.substring(0, rawQris.length - 4);
 
-  // 2. Fungsi Helper untuk Replace/Inject Tag
+  // Helper untuk Replace/Inject Tag
   const replaceTag = (data, tag, newValue, rentang = 4) => {
     const tagIndex = data.indexOf(tag);
     if (tagIndex === -1) return data; // Jika tag tidak ada
 
-    // Ambil 2 digit setelah tag untuk tahu panjang datanya
+    // ( 2 digit ) setelah tag
     const oldLength = parseInt(
       data.substring(tagIndex + 2, tagIndex + rentang),
     );
@@ -80,16 +85,20 @@ export const updateQris = (rawQris, newName, amount) => {
     qrisData = replaceTag(qrisData, "59", newName);
   }
 
-  // 4. Update/Tambah Nominal (Tag 54)
-  // Jika amount ada, kita masukkan. Jika tidak ada tag 54, kita harus menambahkannya
-  // Biasanya tag 54 berada sebelum tag 58 (Currency)
+  // 4. Update Nominal (Tag 54) - Format: 54 + 2 digit length + value
   if (amount) {
+    if (Number(amount) <= 0) {
+      throw new Error("Nominal harus lebih besar dari 0.");
+    }
     const indx = qrisData.indexOf("11");
-    const am = amount.toString()
-   const leng = am.length < 10 ? "0" + am.length : am.length.toString();
+    const am = amount.toString();
+    const leng = am.length < 10 ? "0" + am.length : am.length.toString();
     qrisData =
-      qrisData.slice(0, indx - 1) + "21254" + leng + am + qrisData.slice(indx + 2);
-
+      qrisData.slice(0, indx - 1) +
+      "21254" +
+      leng +
+      am +
+      qrisData.slice(indx + 2);
   }
 
   // 6. Hitung ulang CRC16
@@ -97,7 +106,7 @@ export const updateQris = (rawQris, newName, amount) => {
   return qrisData + crc;
 };
 
-// Fungsi pembantu untuk hitung ulang Checksum
+// Fungsi hitung ulang Checksum
 function hitungCRC16(str) {
   let crc = 0xffff;
   for (let i = 0; i < str.length; i++) {
@@ -121,9 +130,9 @@ function hitungCRC16(str) {
 export const generateQrisImage = async (qrisString) => {
   try {
     const options = {
-      errorCorrectionLevel: "M", // Level M cukup aman untuk QRIS
+      errorCorrectionLevel: "M",
       margin: 2,
-      width: 400, // Ukuran pixel
+      width: 400,
       color: {
         dark: "#000000",
         light: "#FFFFFF",
