@@ -55,10 +55,7 @@ function GenerateQris() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!originalQris || !newname) {
-      showValue("Nama Merchant dan Foto QRIS wajib diisi!");
-      return;
-    }
+
     try {
       setisPending(true);
       const rawQris = await readQrisImage(originalQris);
@@ -77,44 +74,50 @@ function GenerateQris() {
       {/* Hero Section */}
       <div className="bg-slate-700 py-16 px-4">
         <div className="max-w-4xl mx-auto text-center text-white">
-          <h1 className="text-3xl md:text-5xl font-extrabold mb-4">QRIS Tool Generator</h1>
-          <p className="text-slate-100 text-lg">Ubah QRIS Statis menjadi Dinamis atau Ubah Nama Merchant dengan Mudah.</p>
+          <h1 className="text-3xl md:text-5xl font-extrabold mb-4">
+            QRIS Tool Generator
+          </h1>
+          <p className="text-slate-100 text-lg">
+            Ubah QRIS Statis menjadi Dinamis atau Ubah Nama Merchant dengan
+            Mudah.
+          </p>
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 -mt-10 pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-        
           <div className="space-y-4">
-            <FeatureCard 
-              icon="⚡" 
-              title="Cepat & Otomatis" 
-              desc="Deteksi kode QR secara instan dan buat ulang dalam hitungan detik." 
+            <FeatureCard
+              icon="⚡"
+              title="Cepat & Otomatis"
+              desc="Deteksi kode QR secara instan dan buat ulang dalam hitungan detik."
             />
-            <FeatureCard 
-              icon="💰" 
-              title="QRIS Dinamis" 
-              desc="Tambahkan nominal pembayaran agar pelanggan tidak perlu input manual." 
+            <FeatureCard
+              icon="💰"
+              title="QRIS Dinamis"
+              desc="Tambahkan nominal pembayaran agar pelanggan tidak perlu input manual."
             />
-            <FeatureCard 
-              icon="🛡️" 
-              title="Privasi Terjamin" 
-              desc="File diproses langsung di browser Anda tanpa disimpan di server kami." 
+            <FeatureCard
+              icon="🛡️"
+              title="Privasi Terjamin"
+              desc="File diproses langsung di browser Anda tanpa disimpan di server kami."
             />
           </div>
 
-        
           <div className="lg:col-span-2">
             <div className="p-8 shadow-2xl rounded-3xl bg-white border border-slate-100">
               <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <span className="bg-slate-100 text-slate-700 p-2 rounded-lg">⚙️</span>
+                <span className="bg-slate-100 text-slate-700 p-2 rounded-lg">
+                  ⚙️
+                </span>
                 Konfigurasi QRIS Baru
               </h3>
-              
+
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold mb-2">Nama Merchant Baru</label>
+                  <label className="block text-sm font-semibold mb-2">
+                    Nama Merchant Baru
+                  </label>
                   <Input
                     placeholder="Contoh: Toko Berkah Jaya"
                     className="w-full p-3 border-2 border-slate-200 rounded-xl focus:border-slate-500 outline-none transition-all"
@@ -123,18 +126,24 @@ function GenerateQris() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold mb-2">Nominal (Dinamis)</label>
+                  <label className="block text-sm font-semibold mb-2">
+                    Nominal (Dinamis)
+                  </label>
                   <Input
                     placeholder="Masukkan angka (kosongkan jika tetap statis)"
                     className="w-full p-3 border-2 border-slate-200 rounded-xl focus:border-slate-500 outline-none transition-all"
                     onChange={(e) => setAmount(e.target.value)}
                     type="number"
                   />
-                  <p className="text-[10px] text-slate-400 mt-1">*Jika diisi, QRIS akan otomatis menjadi QRIS Dinamis.</p>
+                  <p className="text-[10px] text-slate-400 mt-1">
+                    *Jika diisi, QRIS akan otomatis menjadi QRIS Dinamis.
+                  </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold mb-2">Upload Template QRIS</label>
+                  <label className="block text-sm font-semibold mb-2">
+                    Upload Template QRIS
+                  </label>
                   <div className="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:bg-slate-50 transition-all">
                     <input
                       type="file"
@@ -145,8 +154,8 @@ function GenerateQris() {
                   </div>
                 </div>
 
-                <Button 
-                  className="w-full py-4 rounded-xl bg-slate-600 hover:bg-slate-700 text-white font-bold text-lg shadow-lg transform active:scale-95 transition-all" 
+                <Button
+                  className="w-full py-4 rounded-xl bg-slate-600 hover:bg-slate-700 text-white font-bold text-lg shadow-lg transform active:scale-95 transition-all"
                   onClick={handleSubmit}
                 >
                   Proses & Generate Sekarang
@@ -154,17 +163,33 @@ function GenerateQris() {
               </div>
             </div>
 
-          
             {finalQris && (
               <div className="mt-8 p-8 bg-white rounded-3xl shadow-xl border-2 border-slate-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="flex flex-col md:flex-row items-center gap-8">
                   <div className="w-full max-w-[250px] bg-slate-100 p-4 rounded-2xl">
-                    <img src={finalQris} alt="Generated QRIS" className="w-full h-auto rounded-lg shadow-sm" />
+                    <img
+                      src={finalQris}
+                      alt="Generated QRIS"
+                      className="w-full h-auto rounded-lg shadow-sm"
+                    />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-slate-800 mb-2">QRIS Siap Digunakan! 🎉</h3>
-                    <p className="text-slate-600 mb-6 text-sm">Nama Merchant: <span className="font-bold text-slate-600">{newname}</span><br/>
-                    Tipe: <span className="font-bold text-slate-600">{amount ? `Dinamis (Rp ${parseInt(amount).toLocaleString()})` : "Statis"}</span></p>
+                    <h3 className="text-2xl font-bold text-slate-800 mb-2">
+                      QRIS Siap Digunakan! 🎉
+                    </h3>
+                    <p className="text-slate-600 mb-6 text-sm">
+                      Nama Merchant:{" "}
+                      <span className="font-bold text-slate-600">
+                        {newname==="" ? "Tidak Diubah (Default)" : newname}
+                      </span>
+                      <br />
+                      Tipe:{" "}
+                      <span className="font-bold text-slate-600">
+                        {amount
+                          ? `Dinamis (Rp ${parseInt(amount).toLocaleString()})`
+                          : "Statis"}
+                      </span>
+                    </p>
                     <DownloadButton imageBase64={finalQris} />
                   </div>
                 </div>
